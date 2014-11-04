@@ -25,6 +25,7 @@ var DirectoryView = Backbone.View.extend({
         this.$el.find("#filter").append(this.createSelect());
 
         this.on("change:filterType", this.filterByType, this);
+        this.collection.on("reset", this.render, this);
 
         this.render();
     },
@@ -34,8 +35,8 @@ var DirectoryView = Backbone.View.extend({
     },
 
     render: function() {
+        this.$el.find("article").remove();
         var that = this;
-
         _.each(this.collection.models, function(item){
             that.renderContact(item);
         }, this);
@@ -67,22 +68,21 @@ var DirectoryView = Backbone.View.extend({
 
     setFilter: function(e) {
         this.filterType = e.currentTarget.value;
-        console.log(this.filterType);
         this.trigger("change:filterType");
     },
 
     filterByType: function () {
-
-        if (this.filterType === "all") {
-            this.collection.reset(contacts);
+        console.log(this.filterType)
+        if (this.filterType.toLowerCase() === "all") {
+            this.collection.reset(app.contacts);
         } else {
-            this.collection.reset(contacts, { silent: true });
+            this.collection.reset(app.contacts, { silent: true });
 
             var filterType = this.filterType,
                 filtered = _.filter(this.collection.models, function (item) {
-                    return item.get("type").toLowerCase() === filterType;
+                    var a =  item.get("type").toLowerCase() === filterType;
+                    return a;
                 });
-
             this.collection.reset(filtered);
         }
     }

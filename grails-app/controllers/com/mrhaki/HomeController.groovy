@@ -5,9 +5,9 @@ package com.mrhaki
  */
 class HomeController {
 
+
     def index() {
         def val = params.double('v', 45)
-
         [ val: val ]
     }
 }
